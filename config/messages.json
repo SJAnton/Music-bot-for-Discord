@@ -3,18 +3,6 @@
         "BOT_LOGGED_IN_MESSAGE" : "Bot initialized as",
         "BOT_DISCONNECTED_MESSAGE" : "Bot disconnected.",
 
-        "PLAY_DESCRIPTION" : "Plays a video or adds it to the queue.",
-        "PLAYING_DESCRIPTION" : "Returns the name of the video that is playing.",
-        "SKIP_DESCRIPTION" : "Skips to the next song of the queue.",
-        "PAUSE_DESCRIPTION" : "Pauses the player.",
-        "RESUME_DESCRIPTION" : "Resumes the player.",
-        "QUEUE_DESCRIPTION" : "Displays the contents of the queue.",
-        "CLEAR_DESCRIPTION" : "Empties the queue.",
-        "VOLUME_DESCRIPTION" : "Changes the player's volume (between 0 and 100).",
-        "MOVE_DESCRIPTION" : "Moves the bot to your current voice channel while preserving the queue.",
-        "LEAVE_DESCRIPTION" : "Empties the queue and leaves the voice channel.",
-        "TIME_DESCRIPTION" : "Returns the current date and hour.",
-
         "NOW_PLAYING_MESSAGE" : "Now playing:",
         "ADDED_SONG_MESSAGE": "Added to the queue:",
         "ADDED_PLAYLIST_MESSAGE" : "Added playlist",
@@ -41,6 +29,7 @@
         "SAME_VOICE_CHANNEL_WARNING" : "I am already in the current voice channel.",
 
         "DOWNLOAD_ERROR" : "Could not download the video.",
+        "NO_TOKEN_ERROR" : "Could not start the bot. Missing the token.",
         "PLAY_ERROR" : "Could not play the video.",
         "SKIP_ERROR" : "Could not skip the video."
     },
@@ -48,18 +37,6 @@
     "ES" : {
         "BOT_LOGGED_IN_MESSAGE" : "Bot inicializado como",
         "BOT_DISCONNECTED_MESSAGE" : "Bot desconectado.",
-
-        "PLAY_DESCRIPTION" : "Reproduce una canción o la agrega a la cola.",
-        "PLAYING_DESCRIPTION" : "Devuelve el nombre de la canción que se está reproduciendo.",
-        "SKIP_DESCRIPTION" : "Pasa a la siguiente canción de la cola.",
-        "PAUSE_DESCRIPTION" : "Pausa el reproductor.",
-        "RESUME_DESCRIPTION" : "Reanuda el reproductor pausado.",
-        "QUEUE_DESCRIPTION" : "Muestra el contenido de la cola.",
-        "CLEAR_DESCRIPTION" : "Vacía la cola.",
-        "VOLUME_DESCRIPTION" : "Cambia el volumen del reproductor de sonido (entre 0 y 100).",
-        "MOVE_DESCRIPTION" : "Mueve el bot a tu canal de voz actual preservando la cola de canciones.",
-        "LEAVE_DESCRIPTION" : "Vacía la cola y sale del canal de voz.",
-        "TIME_DESCRIPTION" : "Devuelve la fecha y hora actual.",
 
         "NOW_PLAYING_MESSAGE" : "Reproduciendo:",
         "ADDED_SONG_MESSAGE": "Agregado a la cola:",
@@ -87,6 +64,7 @@
         "SAME_VOICE_CHANNEL_WARNING" : "Ya estoy en el canal de voz actual.",
 
         "DOWNLOAD_ERROR" : "No se pudo descargar el video.",
+        "NO_TOKEN_ERROR" : "No se pudo iniciar el bot. Falta el token.",
         "PLAY_ERROR" : "No se pudo reproducir el video.",
         "SKIP_ERROR" : "No se pudo saltear el video."
     }

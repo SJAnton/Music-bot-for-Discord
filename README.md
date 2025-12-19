@@ -5,13 +5,23 @@ Simple bot that plays audio from YouTube videos and playlists. Supports English 
 
 [discord.py](https://pypi.org/project/discord.py/): API wrapper for Discord.
 
-[yt.dlp](https://pypi.org/project/yt-dlp/): audio/video downloader.
+[Deno](https://docs.deno.com/runtime/getting_started/installation/): JavaScript runtime required by yt-dlp.
+
+[FFmpeg](https://www.ffmpeg.org/download.html): required for audio processing.
+
+[PyNaCl](https://pypi.org/project/PyNaCl/): Python binding to the Networking and Cryptography (NaCl) library.
+
+[tzdata](https://pypi.org/project/tzdata/): package required to display the current date and time.
+
+[yt-dlp](https://pypi.org/project/yt-dlp/): YouTube audio/video downloader.
 
 ## Setup
 
 The token needed for the bot to work can be obtained following [this guide](https://www.writebots.com/discord-bot-token/), then it has to be inserted in the config.json file.
 
-The config.json file also allows the user to change between English (EN) and Spanish (ES), as well as setting the time zone, time format, which result from the search to load, and the volume.
+FFmpeg needs to be added to the server's PATH variable, which can be done following [this guide](https://phoenixnap.com/kb/ffmpeg-windows).
+
+The config.json file also allows the user to change between English (EN) and Spanish (ES), as well as setting the time zone, time format, which result from the search is to be loaded, and the volume.
 
 ### New commands
 
