@@ -4,5 +4,6 @@
     "TIMEZONE" : "America/Argentina/Buenos_Aires",
     "TIME_FORMAT" : "%H:%M:%S",
     "SEARCH_RESULT" : "ytsearch1:",
+    "QUEUE_DISPLAY_SIZE" : 10,
     "VOLUME" : 0.5
 }

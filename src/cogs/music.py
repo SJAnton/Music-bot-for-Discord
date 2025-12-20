@@ -2,7 +2,8 @@ import discord
 import yt_dlp
 from audio.player import is_playable, play_next, search_ytdlp_async, yt_dlp_options
 from discord.ext import commands
-from utils.formatting import get_duration, get_song_title, reply
+from utils.formatting import display_queue, get_duration, get_song_title, reply, reply_with_view
+from utils.view import QueueView
 
 PLAY_DESCRIPTION = "Plays a song or adds it to the queue."
 PLAYING_DESCRIPTION = "Returns the name of the song that is playing."
@@ -125,10 +126,14 @@ class Music(commands.Cog):
         guild_id = ctx.interaction.guild_id
         if guild_id not in self.guild_songs or not self.guild_songs[guild_id]:
             return await reply(ctx.interaction, self.messages["EMPTY_QUEUE_WARNING"], True)
-        message = self.messages["SONGS_IN_QUEUE_MESSAGE"] + '\n'
-        for track in self.guild_songs.get(guild_id, []):
-            message += track.get("title", "Untitled") + '\n'
-        await reply(ctx.interaction, message)
+        init_msg = self.messages["SONGS_IN_QUEUE_MESSAGE"]
+        jump = self.config["QUEUE_DISPLAY_SIZE"]
+        queue = self.guild_songs.get(guild_id, [])
+        await reply_with_view(
+            ctx.interaction,
+            display_queue(queue, 0, jump, init_msg),
+            QueueView(queue, jump, init_msg)
+        )
 
     @commands.hybrid_command(name="clear", description=CLEAR_DESCRIPTION)
     async def clear(self, ctx: commands.Context):
