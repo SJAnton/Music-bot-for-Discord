@@ -1,5 +1,6 @@
 from datetime import datetime
 from discord.ext import commands
+from utils.embed import common_embed
 from utils.formatting import reply
 from zoneinfo import ZoneInfo
 
@@ -16,6 +17,9 @@ class Misc(commands.Cog):
         data = datetime.now(tz=ZoneInfo(self.config["TIMEZONE"]))
         hour = data.strftime(self.config["TIME_FORMAT"])
         await reply(
-            ctx.interaction,
-            f"{self.messages['CURRENT_DATE_MESSAGE']} {data.day}/{data.month}/{data.year}. {self.messages['CURRENT_HOUR_MESSAGE']} {hour}."
+            interaction=ctx.interaction,
+            embed=common_embed(
+                title=f"{self.messages['CURRENT_DATE_MESSAGE']} {data.day}/{data.month}/{data.year}",
+                description=f"{self.messages['CURRENT_HOUR_MESSAGE']} {hour}"
+            )
         )

@@ -1,5 +1,5 @@
 import discord
-from utils.formatting import display_queue
+from utils.embed import queue_embed
 
 class QueueView(discord.ui.View):
     def __init__(self, queue, jump, init_msg, *, timeout=180):
@@ -25,7 +25,7 @@ class QueueView(discord.ui.View):
         self.first -= self.jump
         self.update_buttons()
         await interaction.response.edit_message(
-            content=display_queue(self.queue, self.first, self.first + self.jump, self.init_msg),
+            embed=queue_embed(self.queue, self.first, self.first + self.jump, self.init_msg),
             view=self
         )
     
@@ -34,6 +34,6 @@ class QueueView(discord.ui.View):
         self.first += self.jump
         self.update_buttons()
         await interaction.response.edit_message(
-            content=display_queue(self.queue, self.first, self.first + self.jump, self.init_msg),
+            embed=queue_embed(self.queue, self.first, self.first + self.jump, self.init_msg),
             view=self
         )

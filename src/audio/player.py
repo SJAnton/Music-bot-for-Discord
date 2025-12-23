@@ -1,7 +1,7 @@
 import asyncio
 import discord
 import yt_dlp
-from utils.formatting import get_duration
+from utils.embed import play_embed
 
 ffmpeg_options = {
     "before_options" : "-nostdin -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
@@ -52,13 +52,10 @@ async def play_next(
     try:
         flat_track = guild_songs[guild_id].pop(0)
         track = await search_ytdlp_async(flat_track["url"], yt_dlp_options)
-        audio_url = track["url"]
-        song_title = track.get("title", "Untitled")
-        duration = get_duration(track)
 
         def play_after(error):
             if error:
-                print(f"{messages['SKIP_ERROR']} {song_title}.")
+                print(f"{messages['SKIP_ERROR']}\n {track.get("title", "Untitled")}.")
             asyncio.run_coroutine_threadsafe(
                 play_next(
                     voice_client,
@@ -73,11 +70,11 @@ async def play_next(
                 bot_loop
             )
 
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(audio_url, **ffmpeg_options), volume=volume)
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(track["url"], **ffmpeg_options), volume=volume)
         source.read() # Fixes the fast playing at the beginning
         voice_client.play(source, after=play_after)
         guild_song_playing[guild_id] = track
-        asyncio.create_task(channel.send(f"{messages['NOW_PLAYING_MESSAGE']} {song_title} [{duration}]"))
+        asyncio.create_task(channel.send(embed=play_embed(messages, track)))
     except Exception as e:
         print(f"{messages['PLAY_ERROR']}\n {e}")
         asyncio.create_task(
