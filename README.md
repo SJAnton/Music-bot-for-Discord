@@ -37,9 +37,11 @@ Every message can be customized via the messages.json file, as well as adding an
 |/play | Plays the audio from a video, by searching or directly from a link. |
 |/playing | Displays the song that is playing. |
 |/skip | Skips to the next song in the queue. |
+|/jumpto | Skips the song that is playing and jumps to a specific position of the queue. |
 |/pause | Pauses the player. |
 |/resume | Resumes the player. |
 |/queue | Displays the contents of the queue. |
+|/qadd | Inserts a video or playlist to a specific position of the queue. |
 |/clear | Empties the queue. |
 |/volume | Changes the volume of the player. |
 |/move | Moves the bot to the current voice channel. |

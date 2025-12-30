@@ -4,7 +4,7 @@ from utils.embed import common_embed
 from utils.formatting import reply
 from zoneinfo import ZoneInfo
 
-TIME_DESCRIPTION = "Returns the current date and hour."
+TIME_DESCRIPTION = "Displays the current date and hour."
 
 class Misc(commands.Cog):
     def __init__(self, bot, config, messages):

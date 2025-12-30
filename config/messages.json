@@ -4,13 +4,13 @@
         "BOT_DISCONNECTED_MESSAGE" : "Bot disconnected.",
 
         "NOW_PLAYING_MESSAGE" : "Now playing",
-        "ADDED_SONG_MESSAGE": "Added to the queue:",
+        "ADDED_SONG_MESSAGE": "Added to the queue",
         "ADDED_PLAYLIST_MESSAGE" : "Added playlist",
         "SONGS_NUMBER_MESSAGE" : "Number of songs:",
         "SKIPPED_SONG_MESSAGE" : "Skipped",
         "PAUSED_SONG_MESSAGE" : "Paused",
         "RESUMED_SONG_MESSAGE" : "Resumed",
-        "SONGS_IN_QUEUE_MESSAGE" : "In queue:",
+        "SONGS_IN_QUEUE_MESSAGE" : "In queue",
         "EMPTIED_QUEUE_MESSAGE" : "The queue was emptied.",
         "CLEARED_ITEMS_MESSAGE" : "Cleared items:",
         "VOLUME_CHANGE_MESSAGE" : "Volume changed to",
@@ -19,7 +19,8 @@
         "CURRENT_DATE_MESSAGE" : "Today is",
         "CURRENT_HOUR_MESSAGE" : "Current hour is",
         "REDIRECTION_MESSAGE" : "Link",
-        "DURATION" : "Duration",
+        "DURATION_MESSAGE" : "Duration",
+        "QADD_MESSAGE" : "Added to queue position",
 
         "DISCONNECTED_WARNING" : "You have to be connected to a voice channel to use this command.",
         "EMPTY_QUEUE_WARNING" : "There are no songs in the queue.",
@@ -29,12 +30,13 @@
         "ALREADY_PAUSED_WARNING" : "The player is already paused.",
         "NOT_PAUSED_WARNING" : "The player is not paused.",
         "VOLUME_NUMBER_WARNING" : "The volume must be between 0 and 100.",
-        "SAME_VOICE_CHANNEL_WARNING" : "I am already in the current voice channel.",
+        "SAME_VOICE_CHANNEL_WARNING" : "You are in the same voice channel as the player.",
 
         "DOWNLOAD_ERROR" : "Could not download the video.",
         "NO_TOKEN_ERROR" : "Could not start the bot. Missing the token.",
         "PLAY_ERROR" : "Could not play the video.",
-        "SKIP_ERROR" : "Could not skip the video."
+        "SKIP_ERROR" : "Could not skip the video.",
+        "INVALID_POSITION_ERROR" : "Queue position is invalid."
     },
 
     "ES" : {
@@ -42,13 +44,13 @@
         "BOT_DISCONNECTED_MESSAGE" : "Bot desconectado.",
 
         "NOW_PLAYING_MESSAGE" : "Reproduciendo",
-        "ADDED_SONG_MESSAGE": "Agregado a la cola:",
+        "ADDED_SONG_MESSAGE": "Agregado a la cola",
         "ADDED_PLAYLIST_MESSAGE" : "Se agregó la playlist",
         "SONGS_NUMBER_MESSAGE" : "Cantidad de canciones:",
         "SKIPPED_SONG_MESSAGE" : "Saltado",
         "PAUSED_SONG_MESSAGE" : "Pausado",
         "RESUMED_SONG_MESSAGE" : "Resumido",
-        "SONGS_IN_QUEUE_MESSAGE" : "En cola:",
+        "SONGS_IN_QUEUE_MESSAGE" : "En cola",
         "EMPTIED_QUEUE_MESSAGE" : "Se vació la cola.",
         "CLEARED_ITEMS_MESSAGE" : "Items borrados:",
         "VOLUME_CHANGE_MESSAGE" : "El volumen cambió a",
@@ -57,7 +59,8 @@
         "CURRENT_DATE_MESSAGE" : "Hoy es",
         "CURRENT_HOUR_MESSAGE" : "La hora actual es",
         "REDIRECTION_MESSAGE" : "Link",
-        "DURATION" : "Duración",
+        "DURATION_MESSAGE" : "Duración",
+        "QADD_MESSAGE" : "Agregado a la posición",
 
         "DISCONNECTED_WARNING" : "Tenés que estar conectado a un canal de voz para usar este comando.",
         "EMPTY_QUEUE_WARNING" : "No hay ninguna canción en la cola.",
@@ -67,11 +70,12 @@
         "ALREADY_PAUSED_WARNING" : "El reproductor ya está pausado.",
         "NOT_PAUSED_WARNING" : "El reproductor no está pausado.",
         "VOLUME_NUMBER_WARNING" : "El volumen debe estar entre 0 y 100.",
-        "SAME_VOICE_CHANNEL_WARNING" : "Ya estoy en el canal de voz actual.",
+        "SAME_VOICE_CHANNEL_WARNING" : "Estás en el mismo canal de voz que el reproductor.",
 
         "DOWNLOAD_ERROR" : "No se pudo descargar el video.",
         "NO_TOKEN_ERROR" : "No se pudo iniciar el bot. Falta el token.",
         "PLAY_ERROR" : "No se pudo reproducir el video.",
-        "SKIP_ERROR" : "No se pudo saltear el video."
+        "SKIP_ERROR" : "No se pudo saltar el video.",
+        "INVALID_POSITION_ERROR" : "Posición en la cola inválida."
     }
 }

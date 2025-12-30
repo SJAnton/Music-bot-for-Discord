@@ -4,6 +4,7 @@
     "TIMEZONE" : "America/Argentina/Buenos_Aires",
     "TIME_FORMAT" : "%H:%M:%S",
     "SEARCH_RESULT" : "ytsearch1:",
+    "PLAYER_TIME_LIMIT" : 600,
     "QUEUE_DISPLAY_SIZE" : 10,
     "VOLUME" : 0.4
 }

@@ -1,8 +1,7 @@
 import discord
 from datetime import timedelta
-from utils.embed import common_embed
 
-def display_queue(queue, first, last, init_msg):
+def display_queue(queue, first, last):
     if last > len(queue):
         last = len(queue)
     message = ""
@@ -28,23 +27,6 @@ def get_duration(track):
 def get_song_title(interaction, guild_song_playing):
     track = guild_song_playing.get(interaction.guild_id, None)
     return track.get("title", "Untitled") if track else None
-
-async def is_right_channel(interaction, messages, user_voice, voice_client):
-    if not user_voice:
-        await reply(
-            interaction=interaction,
-            embed=common_embed(title=messages["DISCONNECTED_WARNING"]),
-            eph=True
-        )
-        return False
-    elif user_voice.channel != voice_client.channel:
-        await reply(
-            interaction=interaction,
-            embed=common_embed(title=messages["NOT_IN_SAME_CHANNEL_WARNING"]),
-            eph=True
-        )
-        return False
-    return True
 
 async def reply(
         interaction,

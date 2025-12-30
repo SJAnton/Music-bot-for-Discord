@@ -1,7 +1,6 @@
 import asyncio
 import discord
 import yt_dlp
-from utils.embed import play_embed
 
 ffmpeg_options = {
     "before_options" : "-nostdin -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
@@ -34,57 +33,20 @@ async def search_ytdlp_async(query, yt_dlp_opts):
     loop = asyncio.get_running_loop()
     return await loop.run_in_executor(None, lambda : _extract(query, yt_dlp_opts))
 
-# Handles the playing of the next song in the queue.
-async def play_next(
-        voice_client,
-        guild_id,
-        channel,
-        guild_songs,
-        guild_song_playing,
-        messages,
-        volume,
-        bot_loop
-    ):
-    if guild_id not in guild_songs or not guild_songs[guild_id]:
-        # All the songs in the queue have been played.
-        guild_song_playing[guild_id] = None
-        return
+# Makes the bot leave the voice channel automatically after a specific time has passed.
+async def automatic_leave(voice_client, time_limit):
     try:
-        flat_track = guild_songs[guild_id].pop(0)
-        track = await search_ytdlp_async(flat_track["url"], yt_dlp_options)
+        counter = 0
+        while counter < time_limit and not voice_client.is_playing() and not voice_client.is_paused():
+            counter += 1
+            await asyncio.sleep(1)
+        if not voice_client.is_playing() and not voice_client.is_paused():
+            await voice_client.disconnect()
+    except asyncio.CancelledError:
+        return
 
-        def play_after(error):
-            if error:
-                print(f"{messages['SKIP_ERROR']}\n {track.get("title", "Untitled")}.")
-            asyncio.run_coroutine_threadsafe(
-                play_next(
-                    voice_client,
-                    guild_id,
-                    channel,
-                    guild_songs,
-                    guild_song_playing,
-                    messages,
-                    volume,
-                    bot_loop
-                ),
-                bot_loop
-            )
-
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(track["url"], **ffmpeg_options), volume=volume)
-        source.read() # Fixes the fast playing at the beginning
-        voice_client.play(source, after=play_after)
-        guild_song_playing[guild_id] = track
-        asyncio.create_task(channel.send(embed=play_embed(messages, track)))
-    except Exception as e:
-        print(f"{messages['PLAY_ERROR']}\n {e}")
-        asyncio.create_task(
-            play_next(
-                voice_client,
-                guild_id,
-                channel,
-                guild_songs,
-                guild_song_playing,
-                messages,
-                volume,
-                bot_loop
-            ))
+# Returns the audio source of the track.
+async def get_source(track, volume):
+    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(track["url"], **ffmpeg_options), volume=volume)
+    source.read() # Fixes the fast playing at the beginning
+    return source
