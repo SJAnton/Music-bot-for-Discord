@@ -19,6 +19,15 @@ VOLUME_DESCRIPTION = "Changes the volume of the player (between 0 and 100)."
 MOVE_DESCRIPTION = "Moves the player to the requester's current voice channel."
 LEAVE_DESCRIPTION = "Clears the queue and leaves the voice channel."
 
+yt_dlp_options = {
+    "format" : "bestaudio/best",
+    "skip_download" : True,
+    "extract_flat" : True,
+    "preferredcodec" : "opus",
+    "youtube_include_dash_manifest" : False,
+    "youtube_include_hls_manifest" : False,
+}
+
 class Music(commands.Cog):
     def __init__(self, bot, config, messages):
         self.bot = bot
@@ -109,7 +118,7 @@ class Music(commands.Cog):
             voice_client = await user_voice.channel.connect()    
 
         results = await self.get_results(ctx.interaction, query)
-        flat_tracks = results.get("entries", [])
+        flat_tracks = results.get("entries", [results])
         guild_id = ctx.interaction.guild.id
         fwup = ctx.interaction.followup
         await ctx.interaction.response.defer()
