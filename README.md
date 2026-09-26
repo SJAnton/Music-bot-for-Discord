@@ -1,31 +1,23 @@
 # Music bot for Discord
 Simple bot that plays audio from YouTube videos and playlists. Supports English and Spanish.
 
-## Dependencies
+## Requirements
 
-[discord.py](https://pypi.org/project/discord.py/): API wrapper for Discord.
-
-[Deno](https://docs.deno.com/runtime/getting_started/installation/): JavaScript runtime required by yt-dlp.
-
-[FFmpeg](https://www.ffmpeg.org/download.html): required for audio processing.
-
-[PyNaCl](https://pypi.org/project/PyNaCl/): Python binding to the Networking and Cryptography (NaCl) library.
-
-[tzdata](https://pypi.org/project/tzdata/): package required to display the current date and time.
-
-[yt-dlp](https://pypi.org/project/yt-dlp/): YouTube audio/video downloader.
+The only requirement to run this bot is [Docker](https://www.docker.com/get-started/). All dependencies are bundled inside the container.
 
 ## Setup
 
-The token needed for the bot to work can be obtained following [this guide](https://www.writebots.com/discord-bot-token/), then it has to be inserted in the config.json file.
-
-FFmpeg needs to be added to the server's PATH variable, which can be done following [this guide](https://phoenixnap.com/kb/ffmpeg-windows).
-
-The config.json file also allows the user to change between English (EN) and Spanish (ES), as well as setting the time zone, time format, which result from the search is to be loaded, and the volume.
+1. Obtain a Discord bot token by following [this guide](https://www.writebots.com/discord-bot-token/).
+2. Create a `token.env` file in the project's root folder with `DISCORD_TOKEN=your_token_here`
+3. Run `docker compose up --build` command to build the container's image.
 
 ### New commands
 
-Any new commands written for the bot need to be synchronized by executing the bot.tree.sync() line inside the on_ready() function. Otherwise the slash command will not show up when typing it.
+Any new commands written for the bot need to be synchronized by executing the bot.tree.sync() line inside the on_ready() function in the bot.py module. Otherwise the slash command will not show up when typing it.
+
+### Configuration
+
+The config.json file allows the user to switch between English (EN) and Spanish (ES), as well as setting the time zone, time format, which result from the search is to be loaded, and the volume.
 
 ### Custom messages
 
