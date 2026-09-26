@@ -1,0 +1,6 @@
+services:
+  bot:
+    build: .
+    env_file:
+      - token.env
+    restart: unless-stopped

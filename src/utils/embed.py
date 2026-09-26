@@ -1,5 +1,5 @@
 from discord import Embed
-from utils.formatting import display_queue, get_duration
+from .formatting import display_queue, get_duration
 
 def common_embed(title: str, description: str | None = None):
     return Embed(title=title, description=description)

@@ -1,5 +1,5 @@
 import discord
-from utils.embed import queue_embed
+from .embed import queue_embed
 
 class QueueView(discord.ui.View):
     def __init__(self, queue, jump, init_msg, *, timeout=180):

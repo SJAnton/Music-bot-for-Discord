@@ -1,7 +1,7 @@
 import json
 
-CONFIG_PATH = "../config/config.json"
-MESSAGES_PATH = "../config/messages.json"
+CONFIG_PATH = "config/config.json"
+MESSAGES_PATH = "config/messages.json"
 
 def load_config_file():
     try:

@@ -2,25 +2,20 @@ import asyncio
 import discord
 import yt_dlp
 
+DEFAULT_TITLE = "Untitled"
+DELETED_TITLE = "[Deleted video]"
+PRIVATE_TITLE = "[Private video]"
+
 ffmpeg_options = {
     "before_options" : "-nostdin -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
     "options" : "-vn -ar 48000 -ac 2 -f s16le",
     "executable" : "ffmpeg"
 }
 
-yt_dlp_options = {
-    "format" : "bestaudio/best",
-    "skip_download" : True,
-    "extract_flat" : True,
-    "preferredcodec" : "opus",
-    "youtube_include_dash_manifest" : False,
-    "youtube_include_hls_manifest" : False,
-}
-
 # Checks if a song is private or has been deleted.
 def is_playable(track):
-    title = track.get("title", "Untitled")
-    return title != "[Private video]" and title != "[Deleted video]"
+    title = track.get("title", DEFAULT_TITLE)
+    return title not in (DELETED_TITLE, PRIVATE_TITLE)
 
 # Searches for the video and extracts its audio information.
 # Uses download=False as we want this information to be streamed instead of downloaded.

@@ -1,7 +1,7 @@
 from datetime import datetime
 from discord.ext import commands
-from utils.embed import common_embed
-from utils.formatting import reply
+from ..utils.embed import common_embed
+from ..utils.formatting import reply
 from zoneinfo import ZoneInfo
 
 TIME_DESCRIPTION = "Displays the current date and hour."

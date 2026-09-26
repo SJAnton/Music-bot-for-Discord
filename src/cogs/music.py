@@ -1,10 +1,10 @@
 import discord
 import yt_dlp
-from audio.player import *
 from discord.ext import commands
-from utils.embed import *
-from utils.formatting import *
-from utils.view import *
+from ..audio.player import *
+from ..utils.embed import *
+from ..utils.formatting import *
+from ..utils.view import *
 
 PLAY_DESCRIPTION = "Plays a song or adds it to the queue."
 PLAYING_DESCRIPTION = "Returns the name of the song that is being played."
