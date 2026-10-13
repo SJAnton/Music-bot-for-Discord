@@ -43,11 +43,12 @@ class Music(commands.Cog):
         try:
             return await search_ytdlp_async(search_query, yt_dlp_options)
         except yt_dlp.DownloadError as e:
-            return await reply(
+            await reply(
                 interaction=interaction,
                 embed=common_embed(title=self.messages["DOWNLOAD_ERROR"]),
                 eph=True
             )
+            return
 
     async def is_right_channel(self, interaction, user_voice, voice_client):
         if not user_voice:
@@ -118,6 +119,8 @@ class Music(commands.Cog):
             voice_client = await user_voice.channel.connect()    
 
         results = await self.get_results(ctx.interaction, query)
+        if not results:
+            return
         flat_tracks = results.get("entries", [results])
         guild_id = ctx.interaction.guild.id
         fwup = ctx.interaction.followup
@@ -198,14 +201,14 @@ class Music(commands.Cog):
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
                 eph=True
             )
+        elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
+            return
         elif voice_client.is_paused():
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["ALREADY_PAUSED_WARNING"]),
                 eph=True
             )
-        elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
-            return
         voice_client.pause()
         await reply(
             interaction=ctx.interaction,
@@ -225,14 +228,14 @@ class Music(commands.Cog):
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
                 eph=True
             )
+        elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
+            return
         elif voice_client.is_playing() and not voice_client.is_paused():
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PAUSED_WARNING"]),
                 eph=True
             )
-        elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
-            return
         voice_client.resume()
         await reply(
             interaction=ctx.interaction,
