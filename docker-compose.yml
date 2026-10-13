@@ -4,3 +4,11 @@ services:
     env_file:
       - token.env
     restart: unless-stopped
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    command: pytest -v
+    profiles:
+      - test

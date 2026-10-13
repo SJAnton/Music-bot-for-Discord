@@ -3,17 +3,17 @@ Simple bot that plays audio from YouTube videos and playlists. Supports English 
 
 ## Requirements
 
-The only requirement to run this bot is [Docker](https://www.docker.com/get-started/). All dependencies are bundled inside the container.
+Only [Docker](https://www.docker.com/get-started/) is required to run this bot. All dependencies are bundled inside the container.
 
 ## Setup
 
 1. Obtain a Discord bot token by following [this guide](https://www.writebots.com/discord-bot-token/).
 2. Create a `token.env` file in the project's root folder with `DISCORD_TOKEN=your_token_here`
-3. Run `docker compose up --build` command to build the container's image.
+3. Run `docker compose up --build` command to build the container's image and start the bot.
 
 ### New commands
 
-Any new commands written for the bot need to be synchronized by executing the bot.tree.sync() line inside the on_ready() function in the bot.py module. Otherwise the slash command will not show up when typing it.
+Any new commands written for the bot need to be synchronized by executing the bot.tree.sync() line inside the on_ready() function in the src/bot.py module. Otherwise the slash command will not show up when typing it.
 
 ### Configuration
 
@@ -22,6 +22,18 @@ The config.json file allows the user to switch between English (EN) and Spanish 
 ### Custom messages
 
 Every message can be customized via the messages.json file, as well as adding another language, which needs to have the same messages as the English and Spanish versions.
+
+### Tests
+
+Build the test image:
+
+`docker compose build tests`
+
+Run the tests:
+
+`docker compose run --rm tests`
+
+Rebuild the test image after modifying the source code, tests, dependencies, or Dockerfile.test.
 
 ## Commands
 | Command | Description |
