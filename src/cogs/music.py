@@ -28,6 +28,18 @@ yt_dlp_options = {
     "youtube_include_hls_manifest" : False,
 }
 
+yt_dlp_play_options = {
+    "format": "bestaudio/best",
+    "noplaylist": True,
+    "youtube_include_dash_manifest": False,
+    "youtube_include_hls_manifest": False,
+    "extractor_args": {
+        "youtube": {
+            "player_client": ["tv", "android", "ios"]
+        }
+    },
+}
+
 class Music(commands.Cog):
     def __init__(self, bot, config, messages):
         self.bot = bot
@@ -80,7 +92,7 @@ class Music(commands.Cog):
             return
         try:
             flat_track = self.guild_songs[guild_id].pop(0)
-            track = await search_ytdlp_async(flat_track["url"], yt_dlp_options)
+            track = await search_ytdlp_async(flat_track["url"], yt_dlp_play_options)
             source = await get_source(track, self.config["VOLUME"])
 
             def play_after(error):

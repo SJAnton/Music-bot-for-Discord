@@ -7,8 +7,8 @@ DELETED_TITLE = "[Deleted video]"
 PRIVATE_TITLE = "[Private video]"
 
 ffmpeg_options = {
-    "before_options" : "-nostdin -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
-    "options" : "-vn -ar 48000 -ac 2 -f s16le",
+    "before_options" : "-nostdin -re -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -reconnect_at_eof 1",
+    "options" : "-vn -bufsize 128k",
     "executable" : "ffmpeg"
 }
 
@@ -43,5 +43,4 @@ async def automatic_leave(voice_client, time_limit):
 # Returns the audio source of the track.
 async def get_source(track, volume):
     source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(track["url"], **ffmpeg_options), volume=volume)
-    source.read() # Fixes the fast playing at the beginning
     return source
