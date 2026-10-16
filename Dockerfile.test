@@ -4,8 +4,8 @@ WORKDIR /usr/local/app
 
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt requirements-dev.txt ./
+RUN pip install --no-cache-dir -r requirements-dev.txt
 RUN pip install --no-cache-dir -U yt-dlp yt-dlp-ejs
 
 COPY config/config.json config/config.json
