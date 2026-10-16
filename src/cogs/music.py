@@ -222,7 +222,7 @@ class Music(commands.Cog):
     async def resume(self, ctx: commands.Context):
         user_voice = ctx.interaction.user.voice
         voice_client = ctx.interaction.guild.voice_client
-        if not voice_client:
+        if not voice_client or (not voice_client.is_playing() and not voice_client.is_paused()):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
@@ -273,7 +273,7 @@ class Music(commands.Cog):
                 eph=True
             )
         results = await self.get_results(ctx.interaction, query)
-        flat_tracks = results.get("entries", [])
+        flat_tracks = results.get("entries", [results])
         index = pos - 1
         if not flat_tracks:
             return await reply(
