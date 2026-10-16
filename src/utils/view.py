@@ -1,5 +1,7 @@
 import discord
+
 from .embed import queue_embed
+
 
 class QueueView(discord.ui.View):
     def __init__(self, queue, jump, init_msg, *, timeout=180):
@@ -21,19 +23,25 @@ class QueueView(discord.ui.View):
                 item.disabled = self.first + self.jump >= len(self.queue)
 
     @discord.ui.button(emoji="⬅️", style=discord.ButtonStyle.gray)
-    async def previous(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def previous(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
         self.first -= self.jump
         self.update_buttons()
         await interaction.response.edit_message(
-            embed=queue_embed(self.queue, self.first, self.first + self.jump, self.init_msg),
-            view=self
+            embed=queue_embed(
+                self.queue, self.first, self.first + self.jump, self.init_msg
+            ),
+            view=self,
         )
-    
+
     @discord.ui.button(emoji="➡️", style=discord.ButtonStyle.gray)
     async def next(self, interaction: discord.Interaction, button: discord.ui.Button):
         self.first += self.jump
         self.update_buttons()
         await interaction.response.edit_message(
-            embed=queue_embed(self.queue, self.first, self.first + self.jump, self.init_msg),
-            view=self
+            embed=queue_embed(
+                self.queue, self.first, self.first + self.jump, self.init_msg
+            ),
+            view=self,
         )

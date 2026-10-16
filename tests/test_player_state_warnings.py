@@ -19,19 +19,33 @@ async def test_resume_when_playing(simcord_env):
 @pytest.mark.simcord(strict_sync=False)
 async def test_volume_less_than_zero(simcord_env):
     await assert_function_from_voice_channel_and_response(
-        simcord_env, "volume", "VOLUME_NUMBER_WARNING", is_playing=True, is_paused=False, vol=-100
+        simcord_env,
+        "volume",
+        "VOLUME_NUMBER_WARNING",
+        is_playing=True,
+        is_paused=False,
+        vol=-100,
     )
 
 
 @pytest.mark.simcord(strict_sync=False)
 async def test_volume_over_a_hundred(simcord_env):
     await assert_function_from_voice_channel_and_response(
-        simcord_env, "volume", "VOLUME_NUMBER_WARNING", is_playing=True, is_paused=False, vol=200
+        simcord_env,
+        "volume",
+        "VOLUME_NUMBER_WARNING",
+        is_playing=True,
+        is_paused=False,
+        vol=200,
     )
 
 
 @pytest.mark.simcord(strict_sync=False)
 async def test_move_to_same_channel(simcord_env):
     await assert_function_from_voice_channel_and_response(
-        simcord_env, "move", "SAME_VOICE_CHANNEL_WARNING", is_playing=True, is_paused=False
+        simcord_env,
+        "move",
+        "SAME_VOICE_CHANNEL_WARNING",
+        is_playing=True,
+        is_paused=False,
     )

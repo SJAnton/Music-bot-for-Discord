@@ -1,6 +1,8 @@
 from discord.ext import commands
+
 from .cogs.misc import Misc
 from .cogs.music import Music
+
 
 class Bot(commands.Bot):
     def __init__(self, config, messages, **kwargs):
@@ -13,5 +15,5 @@ class Bot(commands.Bot):
         await self.add_cog(Music(self, self.config, self.messages))
 
     async def on_ready(self):
-        #await bot.tree.sync()
+        # await bot.tree.sync()
         print(f"{self.messages['BOT_LOGGED_IN_MESSAGE']} {self.user}.")

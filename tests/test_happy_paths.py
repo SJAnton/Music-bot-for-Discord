@@ -1,6 +1,12 @@
+from unittest.mock import AsyncMock, patch
+
 import pytest
-from conftest import setup_playing_scenario, get_embedded_title, get_message, QUEUE_EXAMPLE
-from unittest.mock import patch, AsyncMock
+from conftest import (
+    QUEUE_EXAMPLE,
+    get_embedded_title,
+    get_message,
+    setup_playing_scenario,
+)
 
 
 @pytest.mark.simcord(strict_sync=False)
@@ -11,7 +17,9 @@ async def test_jumpto_right_position(simcord_env):
 
     assert result.acknowledged
     assert not result.ephemeral
-    assert get_embedded_title(result) == get_message(simcord_env.bot, "SKIPPED_SONG_MESSAGE")
+    assert get_embedded_title(result) == get_message(
+        simcord_env.bot, "SKIPPED_SONG_MESSAGE"
+    )
 
 
 @pytest.mark.simcord(strict_sync=False)
@@ -19,7 +27,9 @@ async def test_qadd_right_position(simcord_env):
     ctx = await setup_playing_scenario(simcord_env)
 
     fake_result = {"entries": [{"title": "Fake Song", "url": "http://fake.com"}]}
-    with patch("src.cogs.music.search_ytdlp_async", new=AsyncMock(return_value=fake_result)):
+    with patch(
+        "src.cogs.music.search_ytdlp_async", new=AsyncMock(return_value=fake_result)
+    ):
         result = await ctx.user.slash(ctx.channel, "qadd", pos=3, query="test")
 
     expected = f"{get_message(simcord_env.bot, 'QUEUE_POSITION_MESSAGE')} 3: Fake Song"
@@ -33,12 +43,16 @@ async def test_search_and_play(simcord_env):
     ctx = await setup_playing_scenario(simcord_env)
 
     fake_result = {"entries": [{"title": "Fake Song", "url": "http://fake.com"}]}
-    with patch("src.cogs.music.search_ytdlp_async", new=AsyncMock(return_value=fake_result)):
+    with patch(
+        "src.cogs.music.search_ytdlp_async", new=AsyncMock(return_value=fake_result)
+    ):
         result = await ctx.user.slash(ctx.channel, "play", query="test")
 
     assert result.acknowledged
     assert not result.ephemeral
-    assert get_embedded_title(result) == get_message(simcord_env.bot, "ADDED_SONG_MESSAGE")
+    assert get_embedded_title(result) == get_message(
+        simcord_env.bot, "ADDED_SONG_MESSAGE"
+    )
 
 
 @pytest.mark.simcord(strict_sync=False)
@@ -50,15 +64,19 @@ async def test_skip_while_playing(simcord_env):
         "entries": [
             {"title": "Fake Song", "url": "http://fake.com"},
             {"title": "Fake Song 2", "url": "http://fake2.com"},
-        ]
+        ],
     }
-    with patch("src.cogs.music.search_ytdlp_async", new=AsyncMock(return_value=fake_result)):
+    with patch(
+        "src.cogs.music.search_ytdlp_async", new=AsyncMock(return_value=fake_result)
+    ):
         await ctx.user.slash(ctx.channel, "play", query="test")
         result = await ctx.user.slash(ctx.channel, "skip")
 
     assert result.acknowledged
     assert not result.ephemeral
-    assert get_embedded_title(result) == get_message(simcord_env.bot, "SKIPPED_SONG_MESSAGE")
+    assert get_embedded_title(result) == get_message(
+        simcord_env.bot, "SKIPPED_SONG_MESSAGE"
+    )
 
 
 @pytest.mark.simcord(strict_sync=False)
@@ -76,7 +94,9 @@ async def test_show_song_being_played(simcord_env):
 
     assert result.acknowledged
     assert not result.ephemeral
-    assert get_embedded_title(result) == get_message(simcord_env.bot, "NOW_PLAYING_MESSAGE")
+    assert get_embedded_title(result) == get_message(
+        simcord_env.bot, "NOW_PLAYING_MESSAGE"
+    )
 
 
 @pytest.mark.simcord(strict_sync=False)
@@ -103,7 +123,7 @@ async def test_move_to_another_channel(simcord_env):
     with patch.object(real_guild.voice_client, "move_to", new=AsyncMock()):
         result = await user.slash(channel, "move")
 
-    expected = f"{get_message(simcord_env.bot, "MOVED_MESSAGE")} General Voice B"
+    expected = f"{get_message(simcord_env.bot, 'MOVED_MESSAGE')} General Voice B"
     assert result.acknowledged
     assert not result.ephemeral
     assert get_embedded_title(result) == expected
@@ -117,7 +137,9 @@ async def test_leave_while_playing(simcord_env):
 
     assert result.acknowledged
     assert not result.ephemeral
-    assert get_embedded_title(result) == get_message(simcord_env.bot, "DISCONNECTED_MESSAGE")
+    assert get_embedded_title(result) == get_message(
+        simcord_env.bot, "DISCONNECTED_MESSAGE"
+    )
 
 
 @pytest.mark.simcord(strict_sync=False)

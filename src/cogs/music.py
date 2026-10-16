@@ -1,6 +1,7 @@
 import discord
 import yt_dlp
 from discord.ext import commands
+
 from ..audio.player import *
 from ..utils.embed import *
 from ..utils.formatting import *
@@ -20,12 +21,12 @@ MOVE_DESCRIPTION = "Moves the player to the requester's current voice channel."
 LEAVE_DESCRIPTION = "Clears the queue and leaves the voice channel."
 
 yt_dlp_options = {
-    "format" : "bestaudio/best",
-    "skip_download" : True,
-    "extract_flat" : True,
-    "preferredcodec" : "opus",
-    "youtube_include_dash_manifest" : False,
-    "youtube_include_hls_manifest" : False,
+    "format": "bestaudio/best",
+    "skip_download": True,
+    "extract_flat": True,
+    "preferredcodec": "opus",
+    "youtube_include_dash_manifest": False,
+    "youtube_include_hls_manifest": False,
 }
 
 yt_dlp_play_options = {
@@ -33,12 +34,9 @@ yt_dlp_play_options = {
     "noplaylist": True,
     "youtube_include_dash_manifest": False,
     "youtube_include_hls_manifest": False,
-    "extractor_args": {
-        "youtube": {
-            "player_client": ["tv", "android", "ios"]
-        }
-    },
+    "extractor_args": {"youtube": {"player_client": ["tv", "android", "ios"]}},
 }
+
 
 class Music(commands.Cog):
     def __init__(self, bot, config, messages):
@@ -51,14 +49,18 @@ class Music(commands.Cog):
         self.guild_leave_tasks = {}
 
     async def get_results(self, interaction, query):
-        search_query = query if "youtube.com" in query else self.config["SEARCH_RESULT"] + ' ' + query
+        search_query = (
+            query
+            if "youtube.com" in query
+            else self.config["SEARCH_RESULT"] + " " + query
+        )
         try:
             return await search_ytdlp_async(search_query, yt_dlp_options)
-        except yt_dlp.DownloadError as e:
+        except yt_dlp.DownloadError:
             await reply(
                 interaction=interaction,
                 embed=common_embed(title=self.messages["DOWNLOAD_ERROR"]),
-                eph=True
+                eph=True,
             )
             return
 
@@ -67,25 +69,28 @@ class Music(commands.Cog):
             await reply(
                 interaction=interaction,
                 embed=common_embed(title=self.messages["DISCONNECTED_WARNING"]),
-                eph=True
+                eph=True,
             )
             return False
         elif user_voice.channel != voice_client.channel:
             await reply(
                 interaction=interaction,
                 embed=common_embed(title=self.messages["NOT_IN_SAME_CHANNEL_WARNING"]),
-                eph=True
+                eph=True,
             )
             return False
         return True
-            
+
     async def play_next(self, interaction, bot_loop):
         guild_id = interaction.guild_id
         voice_client = interaction.guild.voice_client
         if guild_id not in self.guild_songs or not self.guild_songs[guild_id]:
             # All the songs in the queue have been played.
             self.guild_song_playing[guild_id] = None
-            if guild_id not in self.guild_leave_tasks or self.guild_leave_tasks[guild_id].done():
+            if (
+                guild_id not in self.guild_leave_tasks
+                or self.guild_leave_tasks[guild_id].done()
+            ):
                 self.guild_leave_tasks[guild_id] = asyncio.create_task(
                     automatic_leave(voice_client, self.config["PLAYER_TIME_LIMIT"])
                 )
@@ -97,8 +102,12 @@ class Music(commands.Cog):
 
             def play_after(error):
                 if error:
-                    print(f"{self.messages['SKIP_ERROR']}\n {track.get("title", "Untitled")}.")
-                asyncio.run_coroutine_threadsafe(self.play_next(interaction, bot_loop), bot_loop)
+                    print(
+                        f"{self.messages['SKIP_ERROR']}\n {track.get('title', 'Untitled')}."
+                    )
+                asyncio.run_coroutine_threadsafe(
+                    self.play_next(interaction, bot_loop), bot_loop
+                )
 
             voice_client.play(source, after=play_after)
             self.guild_song_playing[guild_id] = track
@@ -107,7 +116,7 @@ class Music(commands.Cog):
                 task.cancel()
                 self.guild_leave_tasks[guild_id] = None
             await interaction.channel.send(embed=play_embed(self.messages, track))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"{self.messages['PLAY_ERROR']}\n {e}")
             asyncio.create_task(self.play_next(interaction, bot_loop))
 
@@ -119,16 +128,16 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["DISCONNECTED_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif voice_client and user_voice.channel != voice_client.channel:
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_IN_SAME_CHANNEL_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif not voice_client:
-            voice_client = await user_voice.channel.connect()    
+            voice_client = await user_voice.channel.connect()
 
         results = await self.get_results(ctx.interaction, query)
         if not results:
@@ -138,16 +147,24 @@ class Music(commands.Cog):
         fwup = ctx.interaction.followup
         await ctx.interaction.response.defer()
         if not flat_tracks:
-            return await fwup.send(embed=common_embed(title=self.messages["NO_RESULTS_WARNING"]))
+            return await fwup.send(
+                embed=common_embed(title=self.messages["NO_RESULTS_WARNING"])
+            )
         elif len(flat_tracks) == 1:
             queue = self.guild_songs.setdefault(guild_id, [])
             queue.append(flat_tracks[0])
-            await fwup.send(embed=added_song_embed(self.messages, flat_tracks[0], len(queue)))
+            await fwup.send(
+                embed=added_song_embed(self.messages, flat_tracks[0], len(queue))
+            )
         else:
             playable_tracks = [t for t in flat_tracks if is_playable(t)]
             queue = self.guild_songs.setdefault(guild_id, [])
             queue.extend(playable_tracks)
-            await fwup.send(embed=playlist_embed(self.messages, results, len(playable_tracks), len(queue)))
+            await fwup.send(
+                embed=playlist_embed(
+                    self.messages, results, len(playable_tracks), len(queue)
+                )
+            )
 
         if not voice_client.is_playing() and not voice_client.is_paused():
             return await self.play_next(ctx.interaction, self.bot.loop)
@@ -159,7 +176,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
-                eph=True
+                eph=True,
             )
         await reply(interaction=ctx.interaction, embed=play_embed(self.messages, track))
 
@@ -171,7 +188,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
             return
@@ -180,8 +197,8 @@ class Music(commands.Cog):
             interaction=ctx.interaction,
             embed=common_embed(
                 title=self.messages["SKIPPED_SONG_MESSAGE"],
-                description=get_song_title(ctx.interaction, self.guild_song_playing)
-            )
+                description=get_song_title(ctx.interaction, self.guild_song_playing),
+            ),
         )
 
     @commands.hybrid_command(name="jumpto", description=JUMPTO_DESCRIPTION)
@@ -193,11 +210,11 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["INVALID_POSITION_ERROR"]),
-                eph=True
+                eph=True,
             )
         elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
             return
-        self.guild_songs[ctx.interaction.guild_id] = queue[pos-1:]
+        self.guild_songs[ctx.interaction.guild_id] = queue[pos - 1 :]
         await self.skip(ctx)
 
     @commands.hybrid_command(name="pause", description=PAUSE_DESCRIPTION)
@@ -208,7 +225,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
             return
@@ -216,26 +233,28 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["ALREADY_PAUSED_WARNING"]),
-                eph=True
+                eph=True,
             )
         voice_client.pause()
         await reply(
             interaction=ctx.interaction,
             embed=common_embed(
                 title=self.messages["PAUSED_SONG_MESSAGE"],
-                description=get_song_title(ctx.interaction, self.guild_song_playing)
-            )
+                description=get_song_title(ctx.interaction, self.guild_song_playing),
+            ),
         )
 
     @commands.hybrid_command(name="resume", description=RESUME_DESCRIPTION)
     async def resume(self, ctx: commands.Context):
         user_voice = ctx.interaction.user.voice
         voice_client = ctx.interaction.guild.voice_client
-        if not voice_client or (not voice_client.is_playing() and not voice_client.is_paused()):
+        if not voice_client or (
+            not voice_client.is_playing() and not voice_client.is_paused()
+        ):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
             return
@@ -243,15 +262,15 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PAUSED_WARNING"]),
-                eph=True
+                eph=True,
             )
         voice_client.resume()
         await reply(
             interaction=ctx.interaction,
             embed=common_embed(
                 title=self.messages["RESUMED_SONG_MESSAGE"],
-                description=get_song_title(ctx.interaction, self.guild_song_playing)
-            )
+                description=get_song_title(ctx.interaction, self.guild_song_playing),
+            ),
         )
 
     @commands.hybrid_command(name="queue", description=QUEUE_DESCRIPTION)
@@ -261,7 +280,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["EMPTY_QUEUE_WARNING"]),
-                eph=True
+                eph=True,
             )
         init_msg = self.messages["SONGS_IN_QUEUE_MESSAGE"]
         jump = self.config["QUEUE_DISPLAY_SIZE"]
@@ -269,7 +288,7 @@ class Music(commands.Cog):
         await reply(
             interaction=ctx.interaction,
             embed=queue_embed(queue, 0, jump, init_msg),
-            view=QueueView(queue, jump, init_msg)
+            view=QueueView(queue, jump, init_msg),
         )
 
     @commands.hybrid_command(name="qadd", description=QADD_DESCRIPTION)
@@ -279,7 +298,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["INVALID_POSITION_ERROR"]),
-                eph=True
+                eph=True,
             )
         results = await self.get_results(ctx.interaction, query)
         flat_tracks = results.get("entries", [results])
@@ -287,13 +306,19 @@ class Music(commands.Cog):
         if not flat_tracks:
             return await reply(
                 interaction=ctx.interaction,
-                embed=common_embed(title=self.messages["NO_RESULTS_WARNING"])
+                embed=common_embed(title=self.messages["NO_RESULTS_WARNING"]),
             )
         queue[index:index] = flat_tracks
-        title = flat_tracks[0].get("title", "Untitled") if len(flat_tracks) == 1 else results.get("title", "Untitled")
+        title = (
+            flat_tracks[0].get("title", "Untitled")
+            if len(flat_tracks) == 1
+            else results.get("title", "Untitled")
+        )
         await reply(
             interaction=ctx.interaction,
-            embed=common_embed(title=f"{self.messages['QUEUE_POSITION_MESSAGE']} {pos}: {title}")
+            embed=common_embed(
+                title=f"{self.messages['QUEUE_POSITION_MESSAGE']} {pos}: {title}"
+            ),
         )
 
     @commands.hybrid_command(name="clear", description=CLEAR_DESCRIPTION)
@@ -305,8 +330,8 @@ class Music(commands.Cog):
             interaction=ctx.interaction,
             embed=common_embed(
                 title=self.messages["EMPTIED_QUEUE_MESSAGE"],
-                description=f"{self.messages['CLEARED_ITEMS_MESSAGE']} {n_items}"
-            )
+                description=f"{self.messages['CLEARED_ITEMS_MESSAGE']} {n_items}",
+            ),
         )
 
     @commands.hybrid_command(name="volume", description=VOLUME_DESCRIPTION)
@@ -315,7 +340,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["VOLUME_NUMBER_WARNING"]),
-                eph=True
+                eph=True,
             )
         user_voice = ctx.interaction.user.voice
         voice_client = ctx.interaction.guild.voice_client
@@ -323,7 +348,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
             return
@@ -331,7 +356,9 @@ class Music(commands.Cog):
             voice_client.source.volume = vol / 100
             await reply(
                 interaction=ctx.interaction,
-                embed=common_embed(title=f"{self.messages['VOLUME_CHANGE_MESSAGE']} {vol}")
+                embed=common_embed(
+                    title=f"{self.messages['VOLUME_CHANGE_MESSAGE']} {vol}"
+                ),
             )
 
     @commands.hybrid_command(name="move", description=MOVE_DESCRIPTION)
@@ -342,18 +369,20 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif user_voice.channel == voice_client.channel:
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["SAME_VOICE_CHANNEL_WARNING"]),
-                eph=True
+                eph=True,
             )
         await voice_client.move_to(user_voice.channel)
         await reply(
             interaction=ctx.interaction,
-            embed=common_embed(title=f"{self.messages['MOVED_MESSAGE']} {user_voice.channel.name}")
+            embed=common_embed(
+                title=f"{self.messages['MOVED_MESSAGE']} {user_voice.channel.name}"
+            ),
         )
 
     @commands.hybrid_command(name="leave", description=LEAVE_DESCRIPTION)
@@ -365,7 +394,7 @@ class Music(commands.Cog):
             return await reply(
                 interaction=ctx.interaction,
                 embed=common_embed(title=self.messages["NOT_PLAYING_WARNING"]),
-                eph=True
+                eph=True,
             )
         elif not await self.is_right_channel(ctx.interaction, user_voice, voice_client):
             return
@@ -374,4 +403,7 @@ class Music(commands.Cog):
         self.guild_song_playing[guild_id] = None
         self.guild_songs.get(guild_id, []).clear()
         await voice_client.disconnect()
-        await reply(interaction=ctx.interaction, embed=common_embed(title=self.messages["DISCONNECTED_MESSAGE"]))
+        await reply(
+            interaction=ctx.interaction,
+            embed=common_embed(title=self.messages["DISCONNECTED_MESSAGE"]),
+        )

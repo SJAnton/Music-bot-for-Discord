@@ -4,7 +4,9 @@ from conftest import assert_function_and_response
 
 @pytest.mark.simcord(strict_sync=False)
 async def test_play_not_in_voice_channel(simcord_env):
-    await assert_function_and_response(simcord_env, "play", "DISCONNECTED_WARNING", query="test")
+    await assert_function_and_response(
+        simcord_env, "play", "DISCONNECTED_WARNING", query="test"
+    )
 
 
 @pytest.mark.simcord(strict_sync=False)
@@ -29,7 +31,9 @@ async def test_resume_while_not_playing(simcord_env):
 
 @pytest.mark.simcord(strict_sync=False)
 async def test_volume_while_not_playing(simcord_env):
-    await assert_function_and_response(simcord_env, "volume", "NOT_PLAYING_WARNING", vol=100)
+    await assert_function_and_response(
+        simcord_env, "volume", "NOT_PLAYING_WARNING", vol=100
+    )
 
 
 @pytest.mark.simcord(strict_sync=False)

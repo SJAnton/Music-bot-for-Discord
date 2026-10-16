@@ -1,10 +1,12 @@
+from typing import NamedTuple
+from unittest.mock import AsyncMock, patch
+
 import discord
 import pytest
+from simcord import ChannelHandle, MemberActor
+
 from src.bot import Bot
 from src.utils.json_loader import load_config_file, load_messages_file
-from simcord import ChannelHandle, MemberActor
-from typing import NamedTuple
-from unittest.mock import patch, AsyncMock
 
 CONFIG = load_config_file()
 MESSAGES = load_messages_file(CONFIG["LANGUAGE"])
@@ -27,7 +29,7 @@ class VoiceTestContext(NamedTuple):
 def simcord_bot():
     intents = discord.Intents.default()
     intents.message_content = True
-    return Bot(CONFIG, MESSAGES, command_prefix='!', intents=intents)
+    return Bot(CONFIG, MESSAGES, command_prefix="!", intents=intents)
 
 
 def get_message(bot, message):
@@ -52,7 +54,7 @@ async def assert_function_and_response(env, command, message, **kwargs):
     user = guild.add_member(env.create_user("user"))
 
     result = await user.slash(channel, command, **kwargs)
-    
+
     assert result.acknowledged
     assert result.ephemeral
     assert get_embedded_title(result) == get_message(env.bot, message)
@@ -84,7 +86,9 @@ async def assert_function_from_voice_channel_and_response(
     assert get_embedded_title(result) == get_message(env.bot, message)
 
 
-async def assert_function_from_another_voice_channel_and_response(env, command, message, **kwargs):
+async def assert_function_from_another_voice_channel_and_response(
+    env, command, message, **kwargs
+):
     guild = env.create_guild()
     channel = guild.create_text_channel("general")
     voice_channel_a = guild.create_voice_channel("General Voice A")
@@ -108,7 +112,9 @@ async def assert_function_from_another_voice_channel_and_response(env, command, 
     assert get_embedded_title(result) == get_message(env.bot, message)
 
 
-async def assert_function_with_queue_and_response(env, command, message, queue, **kwargs):
+async def assert_function_with_queue_and_response(
+    env, command, message, queue, **kwargs
+):
     guild = env.create_guild()
     channel = guild.create_text_channel("general")
 

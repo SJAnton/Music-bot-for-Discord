@@ -1,10 +1,13 @@
 from datetime import datetime
-from discord.ext import commands
-from ..utils.embed import common_embed
-from ..utils.formatting import reply
 from zoneinfo import ZoneInfo
 
+from discord.ext import commands
+
+from ..utils.embed import common_embed
+from ..utils.formatting import reply
+
 TIME_DESCRIPTION = "Displays the current date and hour."
+
 
 class Misc(commands.Cog):
     def __init__(self, bot, config, messages):
@@ -20,6 +23,6 @@ class Misc(commands.Cog):
             interaction=ctx.interaction,
             embed=common_embed(
                 title=f"{self.messages['CURRENT_DATE_MESSAGE']} {data.day}/{data.month}/{data.year}",
-                description=f"{self.messages['CURRENT_HOUR_MESSAGE']} {hour}"
-            )
+                description=f"{self.messages['CURRENT_HOUR_MESSAGE']} {hour}",
+            ),
         )

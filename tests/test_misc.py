@@ -1,7 +1,8 @@
-import pytest
-from conftest import get_message, get_embedded_title, get_embedded_description
 from datetime import datetime
 from zoneinfo import ZoneInfo
+
+import pytest
+from conftest import get_embedded_description, get_embedded_title, get_message
 
 
 @pytest.mark.simcord(strict_sync=False)
@@ -17,7 +18,9 @@ async def test_time_command(simcord_env):
 
     expected_hour = now.strftime(config["TIME_FORMAT"])
     expected_title = f"{get_message(simcord_env.bot, 'CURRENT_DATE_MESSAGE')} {now.day}/{now.month}/{now.year}"
-    expected_description = f"{get_message(simcord_env.bot, 'CURRENT_HOUR_MESSAGE')} {expected_hour}"
+    expected_description = (
+        f"{get_message(simcord_env.bot, 'CURRENT_HOUR_MESSAGE')} {expected_hour}"
+    )
 
     assert result.acknowledged
     assert not result.ephemeral
