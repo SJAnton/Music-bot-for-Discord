@@ -20,7 +20,7 @@
         "CURRENT_HOUR_MESSAGE" : "Current hour is",
         "REDIRECTION_MESSAGE" : "Link",
         "DURATION_MESSAGE" : "Duration",
-        "QADD_MESSAGE" : "Added to queue position",
+        "QUEUE_POSITION_MESSAGE" : "Added to queue position",
 
         "DISCONNECTED_WARNING" : "You have to be connected to a voice channel to use this command.",
         "EMPTY_QUEUE_WARNING" : "There are no songs in the queue.",
@@ -60,7 +60,7 @@
         "CURRENT_HOUR_MESSAGE" : "La hora actual es",
         "REDIRECTION_MESSAGE" : "Link",
         "DURATION_MESSAGE" : "Duración",
-        "QADD_MESSAGE" : "Agregado a la posición",
+        "QUEUE_POSITION_MESSAGE" : "Agregado a la posición",
 
         "DISCONNECTED_WARNING" : "Tenés que estar conectado a un canal de voz para usar este comando.",
         "EMPTY_QUEUE_WARNING" : "No hay ninguna canción en la cola.",

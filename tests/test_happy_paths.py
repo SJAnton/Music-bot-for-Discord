@@ -22,7 +22,7 @@ async def test_qadd_right_position(simcord_env):
     with patch("src.cogs.music.search_ytdlp_async", new=AsyncMock(return_value=fake_result)):
         result = await ctx.user.slash(ctx.channel, "qadd", pos=3, query="test")
 
-    expected = f"{get_message(simcord_env.bot, 'QADD_MESSAGE')} 3: Fake Song"
+    expected = f"{get_message(simcord_env.bot, 'QUEUE_POSITION_MESSAGE')} 3: Fake Song"
     assert result.acknowledged
     assert not result.ephemeral
     assert get_embedded_title(result) == expected

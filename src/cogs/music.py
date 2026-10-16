@@ -140,17 +140,14 @@ class Music(commands.Cog):
         if not flat_tracks:
             return await fwup.send(embed=common_embed(title=self.messages["NO_RESULTS_WARNING"]))
         elif len(flat_tracks) == 1:
-            self.guild_songs.setdefault(guild_id, []).append(flat_tracks[0])
-            await fwup.send(
-                embed=common_embed(
-                    title=self.messages['ADDED_SONG_MESSAGE'],
-                    description=flat_tracks[0].get('title', 'Untitled')
-                )
-            )
+            queue = self.guild_songs.setdefault(guild_id, [])
+            queue.append(flat_tracks[0])
+            await fwup.send(embed=added_song_embed(self.messages, flat_tracks[0], len(queue)))
         else:
             playable_tracks = [t for t in flat_tracks if is_playable(t)]
-            self.guild_songs.setdefault(guild_id, []).extend(playable_tracks)
-            await fwup.send(embed=playlist_embed(self.messages, results, len(playable_tracks)))
+            queue = self.guild_songs.setdefault(guild_id, [])
+            queue.extend(playable_tracks)
+            await fwup.send(embed=playlist_embed(self.messages, results, len(playable_tracks), len(queue)))
 
         if not voice_client.is_playing() and not voice_client.is_paused():
             return await self.play_next(ctx.interaction, self.bot.loop)
@@ -296,7 +293,7 @@ class Music(commands.Cog):
         title = flat_tracks[0].get("title", "Untitled") if len(flat_tracks) == 1 else results.get("title", "Untitled")
         await reply(
             interaction=ctx.interaction,
-            embed=common_embed(title=f"{self.messages['QADD_MESSAGE']} {pos}: {title}")
+            embed=common_embed(title=f"{self.messages['QUEUE_POSITION_MESSAGE']} {pos}: {title}")
         )
 
     @commands.hybrid_command(name="clear", description=CLEAR_DESCRIPTION)
